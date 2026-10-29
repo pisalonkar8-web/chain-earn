@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class EbookCoversTest extends TestCase
@@ -31,18 +32,27 @@ class EbookCoversTest extends TestCase
     {
         // Test the protected file mapping only. This does not simulate a payment.
         Gate::define('access-paid-ebooks', fn (User $user) => true);
+        Storage::fake('ebooks');
         $this->actingAs(User::factory()->create());
 
         foreach (config('ebooks') as $key => $book) {
-            $path = storage_path('app/private/ebooks/'.$book['file']);
-            $this->assertFileExists($path);
+            $bytes = "%PDF-1.4\nTest fixture for ".$key."\n%%EOF\n";
+            Storage::disk('ebooks')->put($book['file'], $bytes);
             $response = $this->get(route('ebooks.show', $key))
                 ->assertOk()->assertHeader('Content-Type', 'application/pdf');
             $this->assertStringStartsWith('inline;', $response->headers->get('Content-Disposition'));
             $this->assertStringContainsString('no-store', $response->headers->get('Cache-Control'));
-            $this->assertSame(hash_file('sha256', $path), hash('sha256', $response->streamedContent()));
+            $this->assertSame($bytes, $response->streamedContent());
         }
 
         $this->get('/ebooks/not-a-book')->assertNotFound();
+    }
+
+    public function test_missing_authorized_file_returns_not_found(): void
+    {
+        Storage::fake('ebooks');
+        Gate::define('access-paid-ebooks', fn (User $user) => true);
+        $this->actingAs(User::factory()->create())
+            ->get(route('ebooks.show', array_key_first(config('ebooks'))))->assertNotFound();
     }
 }

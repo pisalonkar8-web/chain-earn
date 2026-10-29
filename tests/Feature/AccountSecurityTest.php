@@ -30,6 +30,26 @@ class AccountSecurityTest extends TestCase
         return array_merge(['name' => 'Member', 'email' => 'member@example.com', 'phone' => '98765 43210', 'password' => 'Strong-password-123', 'password_confirmation' => 'Strong-password-123'], $overrides);
     }
 
+    public function test_email_case_and_whitespace_are_normalized_across_account_flows(): void
+    {
+        $this->post('/register', $this->registration(['email' => ' Member@Example.COM ']))
+            ->assertRedirect('/verify-email');
+        $member = User::where('email', 'member@example.com')->firstOrFail();
+        $this->post('/logout');
+        $this->post('/login', ['email' => ' MEMBER@example.com ', 'password' => 'Strong-password-123'])
+            ->assertRedirect('/dashboard');
+        $this->assertAuthenticatedAs($member);
+        $this->post('/logout');
+        $this->post('/forgot-password', ['email' => ' MEMBER@example.com '])->assertSessionHasNoErrors();
+        Notification::assertSentTo($member, ResetPassword::class);
+        $token = Password::createToken($member);
+        $this->post('/reset-password', [
+            'email' => ' MEMBER@example.com ', 'token' => $token,
+            'password' => 'Another-password-456', 'password_confirmation' => 'Another-password-456',
+        ])->assertRedirect('/login');
+        $this->assertTrue(Hash::check('Another-password-456', $member->fresh()->password));
+    }
+
     public function test_invited_signup_saves_normalized_phone_and_sponsor_and_sends_verification(): void
     {
         $sponsor = User::factory()->create();

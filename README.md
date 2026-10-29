@@ -57,7 +57,7 @@ On Windows, if Vite's default config bundling encounters spawn EPERM, use `npm.c
 
 Real SMTP delivery testing, desktop/mobile acceptance, exact MilesWeb plan compatibility, domain/HTTPS, private production configuration, backup/restore verification, monitoring and a reviewed release/rollback process. See [deployment requirements](docs/DEPLOYMENT_REQUIREMENTS.md). Nothing has been deployed.
 
-The PDF is pending. Demo purchases/entitlements, commissions, ledger, withdrawal review, admin roles and audit history are implemented locally, with 42 passing tests on SQLite and MySQL. Admin assignment is deferred at the user's request. Real checkout, file delivery and provider integrations remain pending. See docs/SIMULATION_GUIDE.md for usage and limitations. Live financial activation also requires the legal/provider approvals in [the specification](docs/CHAIN_EARN_SPEC.md).
+The four PDFs are stored privately as documented in [ebook bundle status](docs/EBOOK_BUNDLE_STATUS.md); demo purchases never unlock them. Demo purchases/entitlements, commissions, ledger, withdrawal review, admin roles and audit history are implemented locally. Admin assignment is deferred at the user's request. Real checkout, paid file delivery and provider integrations remain deferred. See docs/SIMULATION_GUIDE.md for usage and limitations. Live financial activation also requires the legal/provider approvals in [the specification](docs/CHAIN_EARN_SPEC.md).
 
 ## Local completion review — 25 October 2026
 
@@ -67,4 +67,12 @@ SQLite authentication/application checks passed: 42 tests, 187 assertions. Final
 
 The dedicated MySQL suite also passed: 42 tests, 187 assertions, after starting the existing local server. The first attempt encountered connection errors while the server was stopped. Only `chain_earn_test` was used for database tests.
 
-Remaining acceptance requires the actual guide PDF, a selected admin account, real SMTP configuration/delivery testing and desktop/mobile browser review. These items are not claimed complete by the automated checks.
+Remaining acceptance requires a selected admin account, real SMTP configuration/delivery testing and desktop/mobile browser review. The four private PDFs are present; paid access remains deferred. These items are not claimed complete by the automated checks.
+
+## Deployment preparation — 29 October 2026
+
+The user authorized staging/deployment preparation and deferred payment integration. No deployment or public launch has been performed. The current locked dependencies require **PHP >=8.4.1**; use matching web/CLI versions at MilesWeb. The Symfony Mime security advisory was resolved by updating to 8.1.10.
+
+Production defaults are documented in `.env.production.example`; populate it privately on the server, preserve any existing APP_KEY, and keep simulations disabled. Never replace the local `.env` with production settings. The preflight validates key length/cipher, HTTPS URL, cookie protection, explicit simulation disablement and database schema, but cannot certify external services.
+
+GitHub validation is prepared in `.github/workflows/validate.yml` and does not deploy. After the checks and asset build, `php scripts/build-release.php` prepares an ignored release ZIP with application source and compiled assets; it excludes secrets, private PDFs, dependencies and local/runtime data. See [release runbook](docs/RELEASE_RUNBOOK.md) and [current readiness report](docs/DEPLOYMENT_READINESS.md).

@@ -8,11 +8,11 @@
 @if(session('status'))<div class="notice" role="status">{{ session('status') }}</div>@endif
 @if($errors->any())<div class="notice" role="alert"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
 <div class="dashboard-columns">
-<section class="panel"><p class="eyebrow">THE PRODUCT</p><h2>Chain Earn PDF guide</h2><p>Planned price: ₹1,000. The PDF will be provided later; downloads are unavailable.</p>
+<section class="panel"><p class="eyebrow">THE PRODUCT</p><h2>ChainEarn EverPass</h2><p>Plan price: ₹1,000 for the four-ebook collection. PDF delivery is unavailable in the simulation.</p>
 @if(!$purchase)
 <form method="POST" action="{{ route('simulation.purchase') }}">@csrf<label><input type="checkbox" name="simulation_acknowledged" value="1" required> I understand this is a demo purchase with no payment or PDF delivery.</label><button class="button" type="submit">Simulate ₹1,000 purchase</button></form>
 @else
-<p class="badge">{{ $purchase->status === 'purchased' ? 'Demo entitlement active · PDF pending' : 'Demo entitlement revoked · Refunded' }}</p><p>Purchase #{{ $purchase->id }}. Only one demo purchase per account is supported.</p>
+<p class="badge">{{ $purchase->status === 'purchased' ? 'Demo entitlement active · No PDF delivery' : 'Demo entitlement revoked · Refunded' }}</p><p>Purchase #{{ $purchase->id }}. Only one demo purchase per account is supported.</p>
 @endif
 <p class="fine-print">Demo rewards: level 1 ₹500, level 2 ₹250, level 3 ₹100, level 4 ₹50. A sponsor must have an active demo purchase when the invited member purchases. No retroactive rewards or redistribution.</p></section>
 <section class="panel"><p class="eyebrow">SIMULATED WALLET</p><h2>₹{{ number_format($balance / 100, 2) }}</h2><p>Available after reservations and reversals. This is not real money.</p>

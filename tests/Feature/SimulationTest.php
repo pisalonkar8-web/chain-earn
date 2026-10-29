@@ -163,7 +163,7 @@ class SimulationTest extends TestCase
         $owner = $this->earned();
         $stranger = $this->member();
         $this->actingAs($stranger)->get('/simulation')->assertOk()->assertViewHas('balance', 0)
-            ->assertSee('PDF will be provided later')->assertDontSee($owner->email);
+            ->assertSee('PDF delivery is unavailable')->assertDontSee($owner->email);
         $this->get('/simulation/admin')->assertForbidden();
         $this->post('/simulation/admin/purchases/1/refund', ['reason' => 'Unauthorized refund'])->assertForbidden();
         $this->actingAs($this->admin('reviewer'))->get('/simulation/admin')->assertOk()->assertDontSee('Demo audit log');

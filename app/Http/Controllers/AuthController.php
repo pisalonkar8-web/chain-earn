@@ -17,6 +17,9 @@ class AuthController extends Controller
 {
     public function register(Request $request): RedirectResponse
     {
+        if (is_string($request->input('email'))) {
+            $request->merge(['email' => Str::lower(trim($request->input('email')))]);
+        }
         // Indian mobile numbers: accept spaces/hyphens and optional +91/91.
         $phone = $request->input('phone');
         if (is_string($phone)) {
@@ -57,6 +60,9 @@ class AuthController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
+        if (is_string($request->input('email'))) {
+            $request->merge(['email' => Str::lower(trim($request->input('email')))]);
+        }
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],

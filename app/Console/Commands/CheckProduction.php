@@ -14,12 +14,24 @@ class CheckProduction extends Command
 
     public function handle(): int
     {
+        $url = parse_url((string) config('app.url'));
+        $key = (string) config('app.key');
+        $key = str_starts_with($key, 'base64:') ? base64_decode(substr($key, 7), true) : $key;
         $checks = [
             'Production environment' => app()->environment('production'),
             'Debug disabled' => ! config('app.debug'),
-            'Application key configured' => filled(config('app.key')),
-            'HTTPS application URL' => str_starts_with((string) config('app.url'), 'https://'),
+            'Application key valid for cipher' => is_string($key)
+                && \Illuminate\Encryption\Encrypter::supported($key, config('app.cipher')),
+            'HTTPS application URL' => ($url['scheme'] ?? '') === 'https'
+                && filled($url['host'] ?? null)
+                && filter_var($url['host'] ?? '', FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) !== false
+                && ! preg_match('/(^|\.)(example\.(com|org|net)|invalid|test|localhost)$/i', $url['host'] ?? '')
+                && ! in_array(strtolower($url['host'] ?? ''), ['localhost', '127.0.0.1', '[::1]'])
+                && ! isset($url['user']) && ! isset($url['pass']),
             'Secure session cookie' => config('session.secure') === true,
+            'HTTP-only session cookie' => config('session.http_only') === true,
+            'SameSite session protection' => in_array(config('session.same_site'), ['lax', 'strict'], true),
+            'Simulation disabled explicitly' => config('simulation.enabled') === false,
             'Database sessions enabled' => config('session.driver') === 'database',
             'MySQL selected' => config('database.default') === 'mysql',
             'SMTP mail selected' => config('mail.default') === 'smtp',
@@ -37,6 +49,9 @@ class CheckProduction extends Command
             DB::select('SELECT 1');
             $checks['Database reachable'] = true;
             $required = ['users', 'profiles', 'password_reset_tokens', 'sessions', 'cache', 'cache_locks'];
+            if (config('queue.default') === 'database') {
+                $required = array_merge($required, ['jobs', 'job_batches', 'failed_jobs']);
+            }
             $checks['Required tables present'] = collect($required)->every(fn ($table) => Schema::hasTable($table));
             $pending = app('migrator')->getMigrationFiles(database_path('migrations'));
             $ran = Schema::hasTable('migrations') ? app('migration.repository')->getRan() : [];

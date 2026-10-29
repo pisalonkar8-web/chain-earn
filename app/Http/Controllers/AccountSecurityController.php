@@ -15,6 +15,7 @@ class AccountSecurityController extends Controller
 {
     public function sendResetLink(Request $request)
     {
+        $this->normalizeEmail($request);
         $request->validate(['email' => ['required', 'email']]);
         Password::sendResetLink($request->only('email'));
 
@@ -23,6 +24,7 @@ class AccountSecurityController extends Controller
 
     public function resetPassword(Request $request)
     {
+        $this->normalizeEmail($request);
         $request->validate([
             'token' => ['required', 'string'],
             'email' => ['required', 'email'],
@@ -63,5 +65,12 @@ class AccountSecurityController extends Controller
         $request->user()->sendEmailVerificationNotification();
 
         return back()->with('status', 'A new verification link has been sent.');
+    }
+
+    private function normalizeEmail(Request $request): void
+    {
+        if (is_string($request->input('email'))) {
+            $request->merge(['email' => Str::lower(trim($request->input('email')))]);
+        }
     }
 }

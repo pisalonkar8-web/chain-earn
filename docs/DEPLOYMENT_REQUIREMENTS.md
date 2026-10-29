@@ -1,10 +1,10 @@
 # Future deployment requirements
 
-Planning only. No deployment is authorized. MilesWeb compatibility is unverified: obtain the exact plan and written capability details before selecting an approach. A generic claim of Laravel support is insufficient.
+Deployment preparation and hosting inspection are authorized by the user's 29 October 2026 request; payments are deferred. Production launch still requires the requested final approval. The user reports that the existing MilesWeb hosting has been checked for compatibility. Retain that hosting selection and verify the concrete server capabilities during setup. No deployment has been completed.
 
 | Requirement | Evidence to obtain before deployment |
 | --- | --- |
-| PHP | Web and CLI PHP >=8.3 compatible with the eventual Composer lock; preferably a maintained 8.4/8.5 build. Match CLI/FPM versions and run Composer platform checks. |
+| PHP | The current lockfile requires PHP >=8.4.1 through Symfony 8.1 dependencies. Match web and CLI versions and run Composer platform checks. Do not use --ignore-platform-reqs. |
 | Extensions | Ctype, cURL, DOM, Fileinfo, Filter, Hash, Mbstring, OpenSSL, PCRE, PDO, Session, Tokenizer and XML; pdo_mysql for MySQL; pdo_sqlite/sqlite3 for local tests. ZIP for dependency/archive tooling; OPcache recommended. Confirm actual php.ini and disabled functions. |
 | Dependencies/build | Composer 2, SSH or an approved release mechanism, adequate memory/disk. Build assets using compatible Node >=22.12 and the lockfile in CI if hosting lacks Node. Deploy compiled assets and production Composer dependencies; never expose node_modules. |
 | Database | A supported MySQL service, separate restricted application credentials, InnoDB transactions/foreign keys, utf8mb4 and backup/restore access. Validate host-specific version and limits. SQLite is a local/testing alternative, not proof of production ledger suitability. |

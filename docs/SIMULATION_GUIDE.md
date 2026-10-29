@@ -4,7 +4,7 @@
 
 The user selected simulation first. It uses separate sim_* tables and never collects money or UPI details. Production environments reject simulation pages and mutations regardless of the feature flag. CHAIN_SIMULATION_ENABLED=false disables it locally too.
 
-- One demo INR 1,000 PDF purchase per member. The PDF is pending: no download endpoint or fabricated file. Refunded accounts cannot repurchase in this demo.
+- One demo INR 1,000 purchase per member. Four real PDFs now exist in private storage, but simulations never authorize their delivery. The protected ebook route denies paid access by default. Refunded accounts cannot repurchase in this demo.
 - Fixed rewards: INR 500 / 250 / 100 / 50 across four levels. Sponsors qualify through an active demo purchase at the time of the invited member's purchase. No retroactive rewards, compression or redistribution. Unallocated amounts receive no wallet credit.
 - Integer-paise ledger with credits, reservations, releases and reversals. Repeated purchase/request/review/refund submissions do not duplicate entries. Balances cannot be edited through the application.
 - Minimum demo withdrawal INR 500, whole rupees. Balance is reserved immediately. Pending requests can be approved/rejected; approved requests can become simulated_paid/failed. Failure/rejection releases the reservation once. Invalid transitions and self-review are blocked.
@@ -47,4 +47,4 @@ Use `reviewer` for withdrawal-only permissions, or `revoke` to remove access. Th
 
 ## Still pending
 
-PDF file, chosen admin account, real SMTP delivery, browser acceptance, MilesWeb plan/domain/access, backups and operational setup. Real fee/refund rules and provider integrations require later work. No deployment or live financial activation occurred.
+Chosen admin account, real SMTP delivery, browser acceptance, MilesWeb domain/access verification, backups and operational setup. Real fee/refund rules and provider integrations are deferred. No deployment or live financial activation occurred. See DEPLOYMENT_READINESS.md for current checks and authorization.

@@ -9,7 +9,7 @@
 <div class="notice"><strong>Demo data · Financial preview only.</strong> Wallet amounts come from demo transactions and have no cash value. No money is collected, transferred, or available for withdrawal. Network counts below come from actual registrations, not purchases or earning eligibility.</div>
 @if(session('status'))<div class="notice" role="status">{{ session('status') }}</div>@endif
 @if($simulationEnabled)
-<section class="panel" aria-labelledby="simulation-heading"><p class="eyebrow">LOCAL DEMO</p><h2 id="simulation-heading">Explore the product & wallet simulation</h2><p>Try a fictional purchase and see demo rewards and withdrawal requests. No real money moves. The guide PDF is not available yet.</p><a class="button small" href="{{ route('simulation') }}">Open demo simulation ↗</a></section>
+<section class="panel" aria-labelledby="simulation-heading"><p class="eyebrow">LOCAL DEMO</p><h2 id="simulation-heading">Explore the product & wallet simulation</h2><p>Try a fictional purchase and see demo rewards and withdrawal requests. No real money moves. The simulation does not unlock the four ebooks.</p><a class="button small" href="{{ route('simulation') }}">Open demo simulation ↗</a></section>
 @endif
 <section class="stats-grid" aria-label="Account statistics">
 <article class="stat-card"><div><span>Direct referrals</span><small>REGISTERED</small></div><strong>{{ number_format($levelCounts[1]) }}</strong><p>Accounts invited directly by you</p></article>
