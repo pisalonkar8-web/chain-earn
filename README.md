@@ -1,6 +1,10 @@
 ﻿# Chain Earn — local Phase 1 preview
 
-Laravel 13, Blade, Tailwind CSS 4, Vite and MySQL. The application remains in the repository root; `sample` is preserved. No deployment or live financial functionality is enabled. The user-authorized local earning simulation is documented in [the simulation guide](docs/SIMULATION_GUIDE.md), which supersedes older missing-simulation notes.
+Laravel 13, Blade, Tailwind CSS 4, Vite and MySQL. The application remains in the repository root; `sample` is preserved. Live financial functionality is disabled. The user-authorized local earning simulation is documented in [the simulation guide](docs/SIMULATION_GUIDE.md), which supersedes older missing-simulation notes.
+
+## Live deployment — 2 November 2026
+
+The application is live at https://chainearn.live on MilesWeb with PHP 8.4, MariaDB, HTTPS, database sessions and authenticated SMTP. Deployment is manual; GitHub pushes run validation but do not update the live server. See [the deployment record](docs/LIVE_DEPLOYMENT.md) for the deployed revision, public-folder configuration and remaining verification work. Historical local-only notes below describe earlier stages.
 
 ## Start locally
 
